@@ -21,7 +21,7 @@ contract StableCoin is Ownable, ERC20 {
     }
 
     function depositETH() external payable {
-        if (msg.value >= minimumEth)
+        if (msg.value < minimumEth)
             revert InsufficientEthSent(msg.value, minimumEth);
 
         uint256 ethPrice = getETHPriceInUSD();
@@ -48,11 +48,19 @@ contract StableCoin is Ownable, ERC20 {
 
     function getETHPriceInUSD() public view returns (uint256) {
         (, int256 price, , , ) = ethPriceFeed.latestRoundData();
-        return uint256(price);
+        uint8 decimals = ethPriceFeed.decimals();
+        return (uint256(price) / uint256(10 ** decimals));
     }
 
     function changePriceFeed(address priceFeed) external onlyOwner {
         if (priceFeed == address(0)) revert InvalidAddress();
         ethPriceFeed = AggregatorV3Interface(priceFeed);
+    }
+
+    function emergencyWithdraw() external onlyOwner {
+        (bool success, ) = payable(msg.sender).call{
+            value: address(this).balance
+        }("");
+        if (!success) revert ETHTransferFailed();
     }
 }
