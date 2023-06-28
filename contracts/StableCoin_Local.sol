@@ -4,7 +4,7 @@ pragma solidity ^0.8.18;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract StableCoin is Ownable, ERC20 {
+contract StableCoinLocal is Ownable, ERC20 {
     uint256 public totalCollateral;
     uint256 minimumEth = 0.5 ether;
 
