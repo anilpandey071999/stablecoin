@@ -57,6 +57,10 @@ contract StableCoin is Ownable, ERC20 {
         ethPriceFeed = AggregatorV3Interface(priceFeed);
     }
 
+    function changeMinimumEth(uint256 _minimumEth) external onlyOwner {
+        minimumEth = _minimumEth;
+    }
+
     function emergencyWithdraw() external onlyOwner {
         (bool success, ) = payable(msg.sender).call{
             value: address(this).balance
