@@ -2,12 +2,10 @@
 pragma solidity ^0.8.18;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract StableCoin is Ownable, ERC20 {
     uint256 public totalCollateral;
-    AggregatorV3Interface public ethPriceFeed;
     uint256 minimumEth = 0.5 ether;
 
     // Defining custom events
@@ -24,9 +22,7 @@ contract StableCoin is Ownable, ERC20 {
     event MinimumEthChanged(uint256 newMinimumEth);
     event EthWithdrawn(address to, uint256 amount);
 
-    constructor(AggregatorV3Interface _priceFeed) ERC20("nUSD", "nUSD") {
-        ethPriceFeed = _priceFeed;
-    }
+    constructor() ERC20("nUSD", "nUSD") {}
 
     // Function for depositing ETH and receiving nUSD
     function depositETH() external payable {
@@ -61,18 +57,8 @@ contract StableCoin is Ownable, ERC20 {
     }
 
     // Function for getting the latest ETH price in USD
-    function getETHPriceInUSD() public view returns (uint256) {
-        (, int256 price, , , ) = ethPriceFeed.latestRoundData();
-        uint8 decimals = ethPriceFeed.decimals();
-        return (uint256(price) / uint256(10 ** decimals));
-    }
-
-    // Function for changing the minimum ETH deposit
-    function changePriceFeed(address priceFeed) external onlyOwner {
-        if (priceFeed == address(0)) revert InvalidAddress();
-        ethPriceFeed = AggregatorV3Interface(priceFeed);
-
-        emit PriceFeedChanged(priceFeed);
+    function getETHPriceInUSD() public pure returns (uint256) {
+        return 2000;
     }
 
     // Function for changing the minimum ETH deposit
