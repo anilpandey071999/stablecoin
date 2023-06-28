@@ -1,47 +1,58 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.1;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract nUSD is ERC20 {
     uint256 public totalCollateral;
-    address payable public owner;
     AggregatorV3Interface public ethPriceFeed;
+    uint256 minimumEth = 0.5 ether;
 
-    constructor() ERC20("nUSD", "nUSD") {
-        owner = payable(msg.sender);
+    error InsufficientEthSent(uint256 available, uint256 required);
+    error InsufficientNUSDBalance(uint256 available, uint256 required);
+    error InsufficientCollateral(uint256 available, uint256 required);
+    error ETHTransferFailed();
+    error InvalidAddress();
+
+    constructor(AggregatorV3Interface _priceFeed) ERC20("nUSD", "nUSD") {
+        ethPriceFeed = _priceFeed;
     }
 
-     function depositETH() external payable {
-        // TODO: Implement checks to ensure some ETH is being sent.
+    function depositETH() external payable {
+        if (msg.value >= minimumEth)
+            revert InsufficientEthSent(msg.value, minimumEth);
 
-        // TODO: Implement logic to get the price of ETH in USD.
-
-        // TODO: Calculate the amount of nUSD to mint (50% of the USD value of the deposited ETH).
-
-        // TODO: Add the deposited ETH to the total collateral.
-
-        // TODO: Mint the calculated amount of nUSD and transfer to the sender.
+        uint256 ethPrice = getETHPriceInUSD();
+        uint256 nUSDAmount = (msg.value * ethPrice) / 2;
+        totalCollateral += msg.value;
+        _mint(msg.sender, nUSDAmount);
     }
 
     function redeem(uint256 _amount) external {
-        // TODO: Implement checks to ensure the sender has enough nUSD to redeem.
+        uint256 userBalance = balanceOf(msg.sender);
+        if (userBalance < _amount)
+            revert InsufficientNUSDBalance(userBalance, _amount);
+        uint256 ethPrice = getETHPriceInUSD();
+        uint256 ethAmount = (_amount * 2) / ethPrice;
 
-        // TODO: Implement logic to get the price of ETH in USD.
+        if (totalCollateral < ethAmount)
+            revert InsufficientCollateral(totalCollateral, ethAmount);
 
-        // TODO: Calculate the amount of ETH to send (double the USD value of the nUSD to be redeemed).
-
-        // TODO: Check if there is enough collateral to send the calculated amount of ETH.
-
-        // TODO: Subtract the ETH to send from the total collateral.
-
-        // TODO: Burn the nUSD from the sender's balance.
-
-        // TODO: Transfer the calculated amount of ETH to the sender.
+        totalCollateral -= ethAmount;
+        _burn(msg.sender, _amount);
+        (bool success, ) = payable(msg.sender).call{value: ethAmount}("");
+        if (!success) revert ETHTransferFailed();
     }
 
     function getETHPriceInUSD() public view returns (uint256) {
-        // TODO: Implement logic to connect to an oracle and return the current price of ETH in USD.
+        (, int256 price, , , ) = ethPriceFeed.latestRoundData();
+        return uint256(price);
+    }
+
+    function changePriceFeed(address priceFeed) external onlyOwner {
+        if (priceFeed == address(0)) revert InvalidAddress();
+        ethPriceFeed = AggregatorV3Interface(priceFeed);
     }
 }
