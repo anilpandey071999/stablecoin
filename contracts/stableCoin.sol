@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract nUSD is Ownable, ERC20 {
+contract StableCoin is Ownable, ERC20 {
     uint256 public totalCollateral;
     AggregatorV3Interface public ethPriceFeed;
     uint256 minimumEth = 0.5 ether;
