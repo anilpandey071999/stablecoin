@@ -1,6 +1,7 @@
 {
   "name": "hardhat-project",
   "dependencies": {
+    "@chainlink/contracts": "^0.6.1",
     "@nomicfoundation/hardhat-foundry": "^1.0.2",
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.60.1",

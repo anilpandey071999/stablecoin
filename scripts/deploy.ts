@@ -1,22 +1,16 @@
 import { ethers } from "hardhat";
+import { StableCoin__factory, StableCoin } from "../typechain-types";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const priceFeed = "0x0715A7794a1dc8e42615F059dD6e406A6594651A";
 
-  const lockedAmount = ethers.parseEther("0.001");
+  const NUSDFactory: StableCoin__factory = await ethers.getContractFactory("StableCoin");
+  const NUSDContract: StableCoin = await NUSDFactory.deploy(priceFeed);
 
-  const lock = await ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
+  await NUSDContract.waitForDeployment();
+  const NUSDAddress = await NUSDContract.getAddress();
 
-  await lock.waitForDeployment();
-
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
+  console.log(`nUSD: ${NUSDAddress}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
