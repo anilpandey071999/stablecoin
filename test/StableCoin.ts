@@ -29,6 +29,16 @@ describe("StableCoin", function () {
         ethers.parseEther("1000")
       ); // Should mint 1000 nUSD (half of ETH value in USD)
     });
+
+    it("Should revert if less than minimumEth is sent", async function () {
+      const { owner, otherAccount, stableCoin, NUSDAddress } =
+        await deployStable();
+      await expect(
+        stableCoin
+          .connect(otherAccount)
+          .depositETH({ value: ethers.parseEther("0.1") })
+      ).to.be.rejected;
+    });
   });
 
   describe("Redeeming nUSD", function () {
@@ -50,6 +60,14 @@ describe("StableCoin", function () {
         otherAccount.address
       );
       expect(finalEthBalance).to.gt(initialEthBalance);
+    });
+
+    it("Should revert if user tries to redeem more nUSD than they have", async function () {
+      const { owner, otherAccount, stableCoin, NUSDAddress } =
+        await deployStable();
+      await expect(
+        stableCoin.connect(otherAccount).redeem(ethers.parseUnits("2000", 18))
+      ).to.be.rejected;
     });
   });
 
