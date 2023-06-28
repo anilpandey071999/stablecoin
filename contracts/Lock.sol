@@ -32,3 +32,5 @@ contract Lock {
         owner.transfer(address(this).balance);
     }
 }
+
+// npx hardhat verify --network mumbai 0xd08Da9Bcf662e5076d052aFF96EE2fF7aAA6A61C 0x0715A7794a1dc8e42615F059dD6e406A6594651A
