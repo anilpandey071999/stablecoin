@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract StableCoin is Ownable, ERC20 {
     uint256 public totalCollateral;
     AggregatorV3Interface public ethPriceFeed;
-    uint256 minimumEth = 0.5 ether;
+    uint256 public minimumEth = 0.5 ether;
 
     // Defining custom events
     error InsufficientEthSent(uint256 available, uint256 required);

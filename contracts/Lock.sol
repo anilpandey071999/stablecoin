@@ -33,4 +33,4 @@ contract Lock {
     }
 }
 
-// npx hardhat verify --network mumbai 0xd08Da9Bcf662e5076d052aFF96EE2fF7aAA6A61C 0x0715A7794a1dc8e42615F059dD6e406A6594651A
+// npx hardhat verify --network sepolia 0x06A39Fec245B7391CBAD466c835Ac81503f8E1BA 0x694AA1769357215DE4FAC081bf1f309aDC325306
