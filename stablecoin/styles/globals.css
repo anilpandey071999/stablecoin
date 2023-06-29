@@ -14,3 +14,129 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.navbar-header {
+  text-align: center;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.5em 0.5em 0em 0.5em;
+  background-color: #0D0D0D;
+  box-shadow: 0px 6px 24px rgba(16, 23, 32, 0.02);
+  border-radius: 24px;
+  margin: 0em 3em;
+  padding: 10px 0px;
+}
+
+.items-list {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.item {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  /* color: $text-grey; */
+  padding: 0.5em 1em;
+  list-style-type: none;
+  margin: 0px 10px;
+}
+
+.link {
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.remove-text-decoration {
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #E3FF62;
+  background-color: #19191F;
+  border-radius: 10px;
+}
+
+.connect-btn {
+  border: 2px solid #E3FF62;
+  background-color: #19191F;
+  border-radius: 10px;
+  color: #E3FF62;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 20px;
+}
+
+.logo {
+  width: 15em;
+  padding: 0em 1em;
+}
+
+.logo-container {}
+
+.dropdown-container {
+  position: absolute;
+  background-color: #0D0D0D;
+  padding: 1em 0em;
+  margin-top: 7.5em;
+  margin-left: -10em;
+}
+
+.dropdown-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-item .item {
+  text-align: left;
+}
+
+@media only screen and (max-width: 768px) {
+  .navbar-header {
+      display: none;
+  }
+
+  .bm-item-list {
+      display: flex;
+      flex-direction: column;
+  }
+
+  .items-list {
+      flex-direction: column;
+      padding-left: 0px;
+      margin-top: 2em;
+      align-items: center;
+  }
+
+  .items-list .item {
+      margin-bottom: 5px;
+  }
+
+  .logo {
+      width: 100%;
+  }
+
+  .nav-action-items {
+      margin-top: auto;
+  }
+
+  .dropdown-container {
+      position: relative;
+      margin: 0px;
+      background: transparent;
+      padding: 0;
+  } 
+
+  .dropdown-container .dropdown-item .item {
+      text-align: center;
+  }
+}
