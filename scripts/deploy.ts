@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { StableCoin__factory, StableCoin } from "../typechain-types";
 
 async function main() {
-  const priceFeed = "0x0715A7794a1dc8e42615F059dD6e406A6594651A";
+  const priceFeed = "0x694AA1769357215DE4FAC081bf1f309aDC325306";
 
   const NUSDFactory: StableCoin__factory = await ethers.getContractFactory("StableCoin");
   const NUSDContract: StableCoin = await NUSDFactory.deploy(priceFeed);

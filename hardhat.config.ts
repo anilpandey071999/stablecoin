@@ -24,6 +24,15 @@ const config: HardhatUserConfig = {
           },
         },
       },
+      {
+        version: "0.8.0",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
     ],
   },
   networks: {
@@ -40,6 +49,7 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       polygonMumbai: process.env.POLYGONSCAN_API_KEY as string,
+      sepolia: process.env.ETHERSCAN_API_KEY as string
     }
   }
 };
